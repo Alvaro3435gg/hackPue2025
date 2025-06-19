@@ -11,8 +11,8 @@ export default defineConfig({
       injectRegister: 'auto', // ¡Clave para registro automático!
       includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
       manifest: {
-        name: 'ZoeMed',
-        short_name: 'ZoeMed',
+        name: 'agendamedmx',
+        short_name: 'agendamedmx',
         description: 'Aplicación médica progresiva',
         theme_color: '#ffffff',
         background_color: '#ffffff',
