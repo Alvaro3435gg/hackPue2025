@@ -10,13 +10,14 @@ export default function TestData() {
   const [devData, setDevData] = useState<TestItem[]>([]);
   const [prodData, setProdData] = useState<TestItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const apiUrl = import.meta.env.VITE_API_URL; 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [devRes, prodRes] = await Promise.all([
-          fetch('http://localhost:3000/check-dev-db'),
-          fetch('http://localhost:3000/check-prod-db'),
+          fetch(`${apiUrl}/check-dev-db`),
+          fetch(`${apiUrl}/check-prod-db`),
         ]);
 
         const devJson = await devRes.json();
