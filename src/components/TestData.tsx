@@ -16,8 +16,8 @@ export default function TestData() {
     const fetchData = async () => {
       try {
         const [devRes, prodRes] = await Promise.all([
-          fetch(`${apiUrl}check-dev-db`),
-          fetch(`${apiUrl}check-prod-db`),
+          fetch(`${apiUrl}/check-dev-db`),
+          fetch(`${apiUrl}/check-prod-db`),
         ]);
 
         const devJson = await devRes.json();
