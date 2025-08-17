@@ -1,243 +1,150 @@
 /// <reference lib="WebWorker" />
 /* eslint-disable no-restricted-globals */
-
-// Worker para LLM offline con transformers.js (Xenova) en CPU/WASM
-// 🚫 SIN WebGPU: no importes "onnxruntime-web/webgpu"
-
 import { env, pipeline } from "@xenova/transformers";
 
-// ====== ENV (CPU/WASM) ======
-env.allowRemoteModels = false;   // sin red
-env.useBrowserCache = true;     // desactiva cache para depurar
-env.localModelPath = "/models";  // sirve /public/models
+// ====== ENV (WASM/CPU)
+env.allowRemoteModels = false;
+env.useBrowserCache = true;
+const BASE = (import.meta as any).env?.BASE_URL || "/";
+env.localModelPath = `${BASE.replace(/\/?$/, "/")}models`;
 
-// Ajustes WASM estables
 try {
   // @ts-ignore
   env.backends.onnx.wasm.simd = true;
+  // Sube hilos si tu CPU lo permite (mejor que 2)
   // @ts-ignore
-  env.backends.onnx.wasm.numThreads = Math.min(
-    2,
-    (self as any).navigator?.hardwareConcurrency ?? 2
-  );
+  env.backends.onnx.wasm.numThreads = Math.min(4, (self as any).navigator?.hardwareConcurrency ?? 4);
   // @ts-ignore
   env.backends.onnx.wasm.proxy = false;
 } catch {}
 
-// ====== MODELO ======
 const MODEL_ID = "Xenova/Qwen1.5-0.5B-Chat";
-// const MODEL_ID = "Xenova/Phi-3-mini-4k-instruct";
 
-// Archivos JSON obligatorios
-const COMMON_JSON = [
-  "tokenizer.json",
-  "tokenizer_config.json",
-  "generation_config.json",
-  "config.json",
-];
-
-// Nombres ONNX comunes (añadí model_q4.onnx para Phi-3)
-const ONNX_CANDIDATES = [
-  "onnx/decoder_model_merged_quantized.onnx",
-  "onnx/decoder_model_merged.onnx",
-  "onnx/model.onnx",
-  "onnx/model_quantized.onnx",
-  "onnx/model_q4.onnx",
-];
-
-// ====== LOG/COMMS ======
-function wlog(...args: any[]) {
-  try { console.log("[WORKER]", ...args); } catch {}
-  try { (self as any).postMessage({ type: "log", msg: args[0], extra: args[1] }); } catch {}
+// ====== utils
+function send(type: string, payload: any = {}, reqId?: number) {
+  try { (self as any).postMessage({ type, reqId, ...payload }); } catch {}
 }
-function send(type: string, payload: any = {}) {
-  try { (self as any).postMessage({ type, ...payload }); } catch {}
+function normalize(s: string) { return (s||"").toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu,"").trim(); }
+function parseCategory(t: string): "historia"|"matematicas"|"biologia" {
+  const x = normalize((t||"").split(/\r?\n/)[0]||"");
+  if (x.startsWith("hist")) return "historia";
+  if (x.startsWith("mate") || x.startsWith("math")) return "matematicas";
+  if (x.startsWith("bio"))  return "biologia";
+  return "historia";
 }
 
-// ====== PROMPTS ======
-// 1) Clasificación — SOLO categoría en minúsculas
-function buildPromptCategory(question: string) {
-  return (
-`<|im_start|>system
-You are a STRICT classifier.
-
-Choose the best word to match the user question.
-- History
-- Math
-- Entertainment
+// ====== prompts
+const buildPromptCategory = (q:string)=>`<|im_start|>system
+Eres un CLASIFICADOR ESTRICTO.
+Categorias validas (minusculas, sin acentos):
+- historia
+- matematicas
+- biologia
+Responde SOLO una palabra: historia | matematicas | biologia
 <|im_end|>
 <|im_start|>user
-${question}
+${q}
 <|im_end|>
 <|im_start|>assistant
-`);
-}
+`;
 
-
-// 2) Respuesta — SOLO la respuesta final
-function buildPromptAnswer(question: string, category: string) {
-  return (
-`<|im_start|>system
-You are an assistant. The question has been classified as: ${category}.
-Answer the user's question concisely in English.
-
-STRICT OUTPUT:
-Write ONLY the final answer. No category, no preamble, no explanations.
+const buildPromptAnswer = (q:string)=>`<|im_start|>system
+Eres un asistente. Responde conciso en español.
+SALIDA ESTRICTA:
+Escribe SOLO la respuesta final (sin explicaciones extra).
 <|im_end|>
 <|im_start|>user
-${question}
+${q}
 <|im_end|>
 <|im_start|>assistant
-`);
-}
+`;
 
-// ====== PARSERS ======
-function parseCategory(text: string): "math" | "history" | "entertainment" | "other" {
-  const firstLine = (text || "").split(/\r?\n/).find(l => l.trim().length)?.trim().toLowerCase() ?? "";
-  if (firstLine === "math" || firstLine === "history" || firstLine === "entertainment") return firstLine;
-  return "other";
-}
-
-const categoryToDigit: Record<string, "1" | "2" | "3"> = {
-  math: "1",
-  history: "2",
-  entertainment: "3",
-};
-
-// ====== Helpers de red ======
-async function getMeta(url: string) {
-  const res = await fetch(url, { method: "GET", cache: "no-cache" });
-  const len = Number(res.headers.get("content-length") || "0");
-  const type = res.headers.get("content-type") || "";
-  return { ok: res.ok, status: res.status, type, len, url };
-}
-function looksLikeBinaryOk(info: { ok: boolean; status: number; type: string; len: number }) {
-  return !!info && info.ok && info.status === 200 && !String(info.type).includes("text/html");
-}
-
-// ====== STATE ======
+// ====== state
 let generator: any = null;
 
-// ====== WARMUP (CPU/WASM) ======
+// ====== warmup con progreso + “ping” 1 token (reduce la 1ª latencia)
 async function warmup() {
+  if (generator) return;
   try {
-    const base = `${env.localModelPath}/${MODEL_ID}`;
-
-    // Checar JSONs
-    for (const jf of COMMON_JSON) {
-      const j = await getMeta(`${base}/${jf}`);
-      wlog(`CHECK ${jf}`, { status: j.status, len: j.len, type: j.type });
-      if (j.status !== 200) {
-        send("error", { message: `Missing ${jf} at ${base}` });
-        return;
-      }
-    }
-
-    // Checar ONNX existente
-    let found = null as null | string;
-    for (const rel of ONNX_CANDIDATES) {
-      const m = await getMeta(`${base}/${rel}`);
-      wlog(`CHECK ${rel}`, { status: m.status, len: m.len, type: m.type });
-      if (looksLikeBinaryOk(m)) { found = rel; break; }
-    }
-    if (!found) {
-      send("error", { message: `No ONNX found under ${base}/onnx` });
-      return;
-    }
-    wlog("ONNX selected", { rel: found });
-
-    // Crear pipeline (CPU/WASM)
+    send("log", { msg: "WARMUP: creando pipeline", model: MODEL_ID, crossOriginIsolated: (self as any).crossOriginIsolated });
     generator = await pipeline("text-generation", MODEL_ID, {
-      progress_callback: (p: any) => { send("progress", p); wlog("[loader]", p); },
+      progress_callback: (ev: any) => {
+        const { status, name, file, loaded, total, progress } = ev || {};
+        const percent = typeof total === "number" && total > 0
+          ? Math.min(100, Math.round(((loaded || 0) / total) * 100))
+          : (typeof progress === "number" ? Math.round(progress * 100) : null);
+        send("progress", { status, name, file, loaded, total, percent });
+      },
     });
-
-    // Ping mínimo — sin KV cache
-    const warm = await generator("Hello", {
-      max_new_tokens: 1,
-      do_sample: false,
-      return_full_text: false,
-      use_cache: false as any,
-    });
-    wlog("warmup ok", warm);
-
-    send("ready", { modelId: MODEL_ID, backend: "cpu" });
+    // ping 1 token (JIT inicial)
+    await generator("hi", { max_new_tokens: 1, do_sample: false, return_full_text: false });
+    send("ready", { modelId: MODEL_ID });
   } catch (err: any) {
-    wlog("warmup ERROR", { err: String(err?.message || err) });
     send("error", { message: String(err?.message || err) });
   }
 }
 
-// ====== GENERATE (dos consultas) ======
-async function generate(question: string, opts: any = {}) {
+// ====== API: classify (solo categoría)
+async function classify(question: string, reqId?: number) {
   try {
-    if (!generator) {
-      await warmup();
-      if (!generator) return;
-    }
-
-    // ---------- STAGE 1: categoría ----------
-    const p1 = buildPromptCategory(question);
-    const s1 = {
-      max_new_tokens: 128,
+    if (!generator) await warmup();
+    const out: any = await generator(buildPromptCategory(question), {
+      max_new_tokens: 16,
       do_sample: false,
       temperature: 0,
-      top_k: 1,
-      top_p: 1,
-      repetition_penalty: 1.0,
+      top_k: 1, top_p: 1,
       return_full_text: false,
       use_cache: false as any,
-    };
+    });
+    const raw = Array.isArray(out) ? (out[0]?.generated_text ?? "") : String(out);
+    send("classified", { category: parseCategory(raw) }, reqId);
+  } catch (err: any) {
+    send("error", { message: String(err?.message || err) }, reqId);
+  }
+}
 
-    wlog("STAGE1 classify()", { promptPreview: p1.slice(0, 200) + "…", s1 });
-    const o1: any = await generator(p1, s1);
-    const rawCategory = Array.isArray(o1) ? (o1[0]?.generated_text ?? "") : String(o1);
-    const category = parseCategory(rawCategory);
-    wlog("STAGE1 RAW", rawCategory);
-    wlog("STAGE1 PARSED category", category);
+// ====== API: answer (solo respuesta)
+async function answer(question: string, reqId?: number, genOpts: any = {}) {
+  try {
+    if (!generator) await warmup();
 
-    // ---------- STAGE 2: respuesta ----------
-    const p2 = buildPromptAnswer(question, category);
-    const s2 = {
-      max_new_tokens: 128,
-      do_sample: false,  // precisión/consistencia; si quieres variación: true + temperature
+    const MAX = Math.max(1, Math.min(128, Number(genOpts?.maxNewTokens) || 16)); // <= sube/baja desde el caller
+    let tokens = 0;
+    const t0 = performance.now();
+    send("log", { msg: "GEN: start", max_new_tokens: MAX, qlen: question.length }, reqId);
+
+    const out: any = await generator(buildPromptAnswer(question), {
+      max_new_tokens: MAX,
+      do_sample: false,
       temperature: 0,
-      top_k: 1,
-      top_p: 1,
+      top_k: 1, top_p: 1,
       repetition_penalty: 1.05,
       return_full_text: false,
-      use_cache: false as any,
-      ...opts,
-    };
+      use_cache: true as any,
+      // heartbeats por token
+      callback_function: () => {
+        tokens++;
+        if (tokens % 2 === 0) {
+          const pct = Math.min(100, Math.round((tokens / MAX) * 100));
+          const secs = (performance.now() - t0) / 1000;
+          send("progress", { status: "gen", tokens, max: MAX, percent: pct, secs }, reqId);
+        }
+      },
+    });
 
-    wlog("STAGE2 answer()", { promptPreview: p2.slice(0, 200) + "…", s2 });
-    const o2: any = await generator(p2, s2);
-    const rawAnswer = Array.isArray(o2) ? (o2[0]?.generated_text ?? "") : String(o2);
-    const answer = rawAnswer.trim();
-    wlog("STAGE2 RAW", rawAnswer);
-
-    // mantener compatibilidad con UI que espera "choice"
-    const choice = categoryToDigit[category] ?? "3";
-
-    // Enviar resultado final (y logs ya muestran ambas etapas)
-    send("result", { raw: rawAnswer, rawCategory, rawAnswer, category, choice, answer });
+    const raw = Array.isArray(out) ? (out[0]?.generated_text ?? "") : String(out);
+    const secs = (performance.now() - t0) / 1000;
+    send("log", { msg: "GEN: done", tokens, raw, secs, tok_per_sec: tokens ? +(tokens/secs).toFixed(2) : 0 }, reqId);
+    send("result", { answer: raw }, reqId);
   } catch (err: any) {
-    wlog("generate ERROR", { err: String(err?.message || err) });
-    send("error", { message: String(err?.message || err) });
+    send("error", { message: String(err?.message || err) }, reqId);
   }
 }
 
-// ====== HANDLERS ======
+// ====== message handler
 (self as any).onmessage = async (e: MessageEvent) => {
-  const { type, payload } = e.data || {};
-  try {
-    if (type === "warmup") {
-      await warmup();
-    } else if (type === "generate") {
-      const { question, ...opts } = payload || {};
-      await generate(question, opts);
-    }
-  } catch (err: any) {
-    wlog("onmessage ERROR", { err: String(err?.message || err) });
-    send("error", { message: String(err?.message || err) });
-  }
+  const { type, payload, reqId } = e.data || {};
+  if (type === "warmup")   return warmup();
+  if (type === "classify") return classify(payload?.question, reqId);
+  if (type === "answer")   return answer(payload?.question, reqId, payload?.genOpts || {});
 };
