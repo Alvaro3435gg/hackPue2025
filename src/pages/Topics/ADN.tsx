@@ -11,8 +11,8 @@ export default function ADN() {
         <div className="topic-section">
             <TopicNavigator 
                 text={tema.titulo} 
-                prevUrl="https://www.youtube.com" 
-                nextUrl="https://www.canva.com/" 
+                prevUrl="/cellsfunctions" 
+                nextUrl="/adn/quiz" 
             />
             <div className="topic-content">
                 <p>{tema.contenido}</p>

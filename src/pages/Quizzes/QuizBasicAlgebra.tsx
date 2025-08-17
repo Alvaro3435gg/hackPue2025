@@ -40,13 +40,13 @@ export default function QuizBasicAlgebra() {
             {quizPassed ? (
                 <TopicNavigator 
                     text={`Quiz de ${tema.titulo}`} 
-                    prevUrl="https://www.youtube.com" 
+                    prevUrl="/basicalgebra" 
                     nextUrl="https://www.canva.com/"
                 />
             ) : (
                 <NoNext 
                     text={`Quiz de ${tema.titulo}`} 
-                    prevUrl="https://www.youtube.com" 
+                    prevUrl="/basicalgebra" 
                 />
             )}
 

@@ -40,13 +40,13 @@ export default function QuizMexicanRevolution() {
             {quizPassed ? (
                 <TopicNavigator 
                     text={`Quiz de ${tema.titulo}`} 
-                    prevUrl="https://www.youtube.com" 
+                    prevUrl="/mexicanrevolution" 
                     nextUrl="https://www.canva.com/"
                 />
             ) : (
                 <NoNext 
                     text={`Quiz de ${tema.titulo}`} 
-                    prevUrl="https://www.youtube.com" 
+                    prevUrl="/mexicanrevolution" 
                 />
             )}
 

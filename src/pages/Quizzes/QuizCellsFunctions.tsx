@@ -39,13 +39,13 @@ export default function QuizCellsFunctions() {
             {quizPassed ? (
                 <TopicNavigator 
                     text={`Quiz de ${tema.titulo}`} 
-                    prevUrl="https://www.youtube.com" 
+                    prevUrl="/cellsfunctions" 
                     nextUrl="https://www.canva.com/"
                 />
             ) : (
                 <NoNext 
                     text={`Quiz de ${tema.titulo}`} 
-                    prevUrl="https://www.youtube.com" 
+                    prevUrl="/cellsfunctions" 
                 />
             )}
 
