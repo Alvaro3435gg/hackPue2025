@@ -16,9 +16,6 @@ export default defineConfig({
       injectRegister: 'auto',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
       manifest: {
-        id: '/',
-        start_url: '/',
-        scope: '/',
         name: 'agendamedmx',
         short_name: 'agendamedmx',
         description: 'Aplicación médica progresiva',
