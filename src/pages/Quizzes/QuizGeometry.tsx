@@ -40,7 +40,7 @@ export default function QuizGeometry() {
             <TopicNavigator 
                 text={`Quiz de ${tema.titulo}`} 
                 prevUrl="/geometry" 
-                nextUrl="https://www.canva.com/"
+                nextUrl="/trigonometry"
             />
         ) : (
             <NoNext 

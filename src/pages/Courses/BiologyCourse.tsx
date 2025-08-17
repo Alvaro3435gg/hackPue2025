@@ -28,7 +28,7 @@ export default function BiologyCourse({
 
             {/* Saludo */}
             <h2 className="welcome-text">
-                Curso de Matemáticas
+                Curso de Biología
             </h2>
 
             {/* Progreso general */}
@@ -40,7 +40,7 @@ export default function BiologyCourse({
             <div className="courses-section" aria-label="Lista de cursos">
                 {coursesData
                     .flatMap(area => area.temas)
-                    .slice(4, 6)
+                    .slice(6, 8)
                     .map(tema => (
                         <BlueButton
                             key={tema.titulo}

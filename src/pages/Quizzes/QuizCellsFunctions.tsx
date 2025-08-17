@@ -40,7 +40,7 @@ export default function QuizCellsFunctions() {
                 <TopicNavigator 
                     text={`Quiz de ${tema.titulo}`} 
                     prevUrl="/cellsfunctions" 
-                    nextUrl="https://www.canva.com/"
+                    nextUrl="/evolution"
                 />
             ) : (
                 <NoNext 

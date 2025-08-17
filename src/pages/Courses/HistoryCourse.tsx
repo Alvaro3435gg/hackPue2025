@@ -28,7 +28,7 @@ export default function HistoryCourse({
         <div className="start-container">
             {/* Saludo */}
             <h2 className="welcome-text">
-                Curso de Matemáticas
+                Curso de Historia
             </h2>
 
             {/* Progreso general */}
@@ -40,7 +40,7 @@ export default function HistoryCourse({
             <div className="courses-section" aria-label="Lista de cursos">
                 {coursesData
                     .flatMap(area => area.temas)
-                    .slice(2, 4)
+                    .slice(3, 5)
                     .map(tema => (
                         <BlueButton
                             key={tema.titulo}

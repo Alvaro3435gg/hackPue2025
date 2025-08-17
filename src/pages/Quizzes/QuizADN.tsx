@@ -41,7 +41,7 @@ export default function QuizADN() {
                 <TopicNavigator 
                     text={`Quiz de ${tema.titulo}`} 
                     prevUrl="/adn" 
-                    nextUrl="https://www.canva.com/"
+                    nextUrl="/evolution"
                 />
             ) : (
                 <NoNext 

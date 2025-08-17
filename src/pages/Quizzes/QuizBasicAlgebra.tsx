@@ -41,7 +41,7 @@ export default function QuizBasicAlgebra() {
                 <TopicNavigator 
                     text={`Quiz de ${tema.titulo}`} 
                     prevUrl="/basicalgebra" 
-                    nextUrl="https://www.canva.com/"
+                    nextUrl="/trigonometry"
                 />
             ) : (
                 <NoNext 

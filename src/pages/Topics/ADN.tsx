@@ -12,7 +12,7 @@ export default function ADN() {
     const navigate = useNavigate();
 
     const handleReturn = () => {
-        navigate("/biologycourse#");
+        navigate("/biologycourse");
     };
     
     return (

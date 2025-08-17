@@ -12,7 +12,7 @@ export default function CellsFunctions() {
     const navigate = useNavigate();
 
     const handleReturn = () => {
-        navigate("/biologycourse#");
+        navigate("/biologycourse");
     };
     
     return (

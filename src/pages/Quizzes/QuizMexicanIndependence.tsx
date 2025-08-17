@@ -41,7 +41,7 @@ export default function QuizMexicanIndependence() {
                 <TopicNavigator 
                     text={`Quiz de ${tema.titulo}`} 
                     prevUrl="/mexicanindependence" 
-                    nextUrl="https://www.canva.com/"
+                    nextUrl="/contemporaryhistory"
                 />
             ) : (
                 <NoNext 

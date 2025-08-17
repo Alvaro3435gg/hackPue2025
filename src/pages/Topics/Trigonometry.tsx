@@ -12,7 +12,7 @@ export default function Trigonometry() {
     const navigate = useNavigate();
 
     const handleReturn = () => {
-        navigate("/biologycourse#");
+        navigate("/mathcourse");
     };
     
     return (
