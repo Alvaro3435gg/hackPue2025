@@ -69,28 +69,26 @@ export function loadSave(): Save {
 }
 
 export function saveSave(data: Save) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    // notifica a la UI (para refrescar barras si escuchas este evento)
-    window.dispatchEvent(new CustomEvent("progress-changed"));
+    console.log("[progress] saveSave()", data)
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+    const ev = new CustomEvent("progress-changed", { detail: { at: Date.now() } })
+    console.log("[progress] dispatching progress-changed", ev.detail)
+    window.dispatchEvent(ev)
 }
 
 // Registra el resultado de un quiz (umbral opcional para marcar "completed")
-export function recordQuizResult(
-    courseName: string,
-    topicSlug: string,
-    score: number,
-    passThreshold = 60
-) {
-    const save = loadSave();
-    const course = (save.courses[courseName] ||= {});
-    const prev = (course[topicSlug] ||= { completed: false, attempts: 0 });
+export function recordQuizResult(courseName: string, topicSlug: string, score: number, passThreshold = 60) {
+    console.log("[progress] recordQuizResult()", { courseName, topicSlug, score, passThreshold })
+    const save = loadSave()
+    const course = (save.courses[courseName] ||= {})
+    const prev = (course[topicSlug] ||= { completed: false, attempts: 0 })
     course[topicSlug] = {
         completed: score >= passThreshold ? true : prev.completed,
         score: Math.max(prev.score ?? 0, score),
         attempts: (prev.attempts ?? 0) + 1,
         lastAt: new Date().toISOString(),
-    };
-    saveSave(save);
+    }
+    saveSave(save)
 }
 
 // Progreso por curso (0–100)
