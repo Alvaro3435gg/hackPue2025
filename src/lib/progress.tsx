@@ -25,6 +25,8 @@ const asCursos = () => (cursosData as Curso[]);
 // arriba del archivo
 const QUIZ_LIMITS: Record<string, number> = {
     "Biología": 2,
+    "Historia": 2,
+    "Matemáticas": 2
 };
 
 
