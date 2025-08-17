@@ -1,13 +1,11 @@
-// src/App.tsx
-import TestData from './components/TestData';
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from "./routes/AppRoutes";
 
-function App() {
-  return (
-    <div>
-      <h1>Test Collections Viewer</h1>
-      <TestData />
-    </div>
-  );
+export default function App() {
+    return (
+        <BrowserRouter>
+            <AppRoutes />
+        </BrowserRouter>
+    );
 }
 
-export default App;

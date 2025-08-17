@@ -1,0 +1,126 @@
+/* Contenedor del chat anclado abajo */
+.chat-box {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  margin: 0 auto;
+
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  height: 10rem;                 /* altura colapsada */
+  transition: all 0.3s ease-in-out;
+  z-index: 1000;                 /* por si se superpone con otros elementos */
+}
+
+.chat-box.focused {
+  height: 18rem;                 /* altura expandida */
+}
+
+.chat-label {
+  color: #374151;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+/* Historial (scrolleable dentro del chat) */
+.chat-thread {
+  margin: 12px 0;
+  max-height: 12rem;             /* colapsado */
+  overflow-y: auto;
+  display: grid;
+  gap: 8px;
+}
+
+.chat-box.focused .chat-thread {
+  max-height: 20rem;             /* expandido: más historial visible */
+}
+
+/* Mensajes */
+.chat-msg {
+  border: 1px solid #e5e7eb;
+  padding: 8px 10px;
+  border-radius: 8px;
+  white-space: pre-wrap;
+  color: #111827;
+  max-width: 85%;
+}
+
+.chat-msg.user {
+  align-self: end;
+  background: #e0f2fe;           /* azul claro */
+}
+
+.chat-msg.assistant {
+  align-self: start;
+  background: #f6f6f6;           /* gris claro */
+}
+
+.chat-msg.error {
+  color: #b91c1c;
+  border-color: #fecaca;
+  background: #fff1f2;
+}
+
+.chat-msg .pending {
+  margin-left: 6px;
+  opacity: 0.7;
+}
+
+/* Entrada */
+.chat-input-wrapper {
+  position: relative;
+  width: 90%;
+  align-self: flex-end;
+}
+
+.chat-input {
+  width: 75%;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background-color: #d9d9d9;
+  padding: 0.5rem 2.5rem 0.5rem 0.5rem; /* espacio para el icono */
+  outline: none;
+  resize: none;
+  overflow-y: auto;
+}
+
+/* Botón/ícono de enviar */
+.chat-send-icon {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 1rem;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.chat-send-icon:focus {
+  outline: none;
+}
+
+.chat-send-icon img {
+  width: 20px;
+  height: 20px;
+  padding-right: 60px; /* mantén si te gustaba ese offset visual */
+}
+
+.chat-send-icon:active img {
+  transform: scale(1.2);
+}
+
+/* Scrollbar discreto (opcional, webkit) */
+.chat-thread::-webkit-scrollbar {
+  width: 8px;
+}
+.chat-thread::-webkit-scrollbar-thumb {
+  background: #c7c7c7;
+  border-radius: 8px;
+}

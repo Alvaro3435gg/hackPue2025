@@ -1,0 +1,56 @@
+/* General card */
+.progress-card {
+    font-family: 'Inter', sans-serif;
+    width: 70vw;
+    background: #567877; /* verde grisáceo del mock */
+    border-radius: 16px;
+    padding: 16px;
+    display: grid;
+    place-items: center;
+    gap: 10px;
+}
+
+.percent{
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.progress-label {
+    margin: 0;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+/* === VERSIÓN 1 (CIRCULAR) === */
+.progress-circle {
+    position: relative;
+}
+
+/* === VERSIÓN 2 (LINEAL) === */
+.progress-card.linear {
+    width: 70vw;
+    max-width: 400px;
+}
+
+.progress-text {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.progress-track {
+    width: 100%;
+    background-color: #F1F3FA;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 16px;
+    margin-bottom: 10px;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.3s ease-in-out;
+}

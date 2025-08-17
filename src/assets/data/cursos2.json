@@ -1,0 +1,132 @@
+[
+  {
+    "nombre": "Matemáticas",
+    "datoCurioso": "El símbolo igual (=) fue introducido en 1557 por el matemático galés Robert Recorde para evitar repetir la frase “es igual a”.",
+    "temas": [
+      {
+        "titulo": "Álgebra básica",
+        "url": "basicalgebra",
+        "contenido": "El álgebra es una rama fundamental de las matemáticas que nos permite trabajar con símbolos y letras en lugar de solo números. Gracias a esto, podemos representar relaciones generales y resolver problemas de forma más flexible. Por ejemplo, en lugar de decir que 2 + 3 es igual a 5, podemos decir que x + 3 = 5, lo cual nos permite encontrar que x es igual a 2.\n\nAdemás, el álgebra es esencial para comprender cómo funcionan las ecuaciones y cómo se representan diferentes situaciones de la vida real, como calcular el costo total de productos, predecir resultados o entender patrones. Dominar el álgebra es clave para avanzar en matemáticas más avanzadas como geometría, cálculo y estadística."
+      },
+      {
+        "titulo": "Geometría",
+        "url": "geometry",
+        "contenido": "La geometría es la rama de las matemáticas que estudia las propiedades y relaciones de puntos, líneas, superficies y cuerpos en el espacio. Desde la antigüedad, se ha utilizado para medir tierras, construir edificios y comprender la forma del mundo que nos rodea. En la geometría plana, por ejemplo, trabajamos con figuras como triángulos, círculos y polígonos.\n\nMás allá de la teoría, la geometría tiene aplicaciones prácticas en áreas como la arquitectura, el diseño gráfico y la ingeniería. Saber calcular perímetros, áreas y volúmenes es esencial para resolver problemas cotidianos y profesionales, y también desarrolla habilidades de razonamiento lógico y espacial."
+      },
+      {
+        "titulo": "Trigonometría",
+        "url": "trigonometry",
+        "contenido": "La trigonometría estudia las relaciones entre los ángulos y los lados de los triángulos. Es fundamental para la física, ingeniería y arquitectura, así como para entender fenómenos periódicos y ondas en matemáticas avanzadas."
+      }
+    ],
+    "quiz": {
+      "preguntas": [
+        {
+          "pregunta": "¿Qué representa la letra en una ecuación algebraica?",
+          "opciones": [
+            "Un número desconocido o variable",
+            "Una operación matemática",
+            "El resultado final",
+            "Una constante universal"
+          ],
+          "respuestaCorrecta": 0
+        },
+        {
+          "pregunta": "¿Qué figura tiene todos sus lados y ángulos iguales?",
+          "opciones": [
+            "Un rectángulo",
+            "Un cuadrado",
+            "Un triángulo escaleno",
+            "Un trapecio"
+          ],
+          "respuestaCorrecta": 1
+        }
+      ]
+    }
+  },
+  {
+    "nombre": "Historia",
+    "datoCurioso": "La palabra “México” proviene del náhuatl Mēxihco, que hacía referencia al territorio del pueblo mexica en el valle de Anáhuac.",
+    "temas": [
+      {
+        "titulo": "Independencia de México",
+        "url": "mexicanindependence",
+        "contenido": "La independencia de México fue un proceso histórico que comenzó en 1810 con el famoso Grito de Dolores encabezado por Miguel Hidalgo y Costilla. Este movimiento buscaba poner fin al dominio español y otorgar libertad a los pueblos que habían sido oprimidos durante siglos. A lo largo de los años, diferentes líderes como José María Morelos y Vicente Guerrero continuaron la lucha.\n\nFinalmente, en 1821 se logró la independencia con la firma del Acta de Independencia y la entrada triunfal del Ejército Trigarante a la Ciudad de México. Este hecho marcó el inicio de un México soberano, aunque no significó el fin inmediato de los conflictos internos ni de las luchas por construir una nación justa y equitativa."
+      },
+      {
+        "titulo": "Revolución Mexicana",
+        "url": "mexicanrevolution",
+        "contenido": "La Revolución Mexicana inició en 1910 como un movimiento armado contra la dictadura de Porfirio Díaz, quien llevaba más de 30 años en el poder. Los campesinos, obreros y diferentes sectores de la sociedad se unieron para exigir justicia social, mejores condiciones de trabajo y el fin de la concentración de tierras en pocas manos. Líderes como Francisco I. Madero, Emiliano Zapata y Pancho Villa se convirtieron en símbolos de la lucha.\n\nAunque fue un proceso largo y complejo, con muchos enfrentamientos entre distintas facciones, la Revolución dejó como legado importantes transformaciones en la política y en la sociedad mexicana. La Constitución de 1917, producto de este movimiento, incluyó avances en derechos laborales, educación y propiedad de la tierra, sentando las bases del México moderno."
+      },
+      {
+        "titulo": "Historia Contemporánea",
+        "url": "contemporaryhistory",
+        "contenido": "La historia contemporánea estudia los eventos más recientes desde finales del siglo XIX hasta la actualidad, incluyendo guerras mundiales, movimientos sociales y cambios políticos significativos que han moldeado el mundo moderno."
+      }
+    ],
+    "quiz": {
+      "preguntas": [
+        {
+          "pregunta": "¿Quién inició el movimiento de Independencia de México con el Grito de Dolores?",
+          "opciones": [
+            "Benito Juárez",
+            "Miguel Hidalgo y Costilla",
+            "José María Morelos",
+            "Vicente Guerrero"
+          ],
+          "respuestaCorrecta": 1
+        },
+        {
+          "pregunta": "¿En qué año comenzó la Revolución Mexicana?",
+          "opciones": [
+            "1810",
+            "1821",
+            "1910",
+            "1917"
+          ],
+          "respuestaCorrecta": 2
+        }
+      ]
+    }
+  },
+  {
+    "nombre": "Biología",
+    "datoCurioso": "Si estiraras el ADN de una sola célula humana, mediría aproximadamente dos metros de longitud.",
+    "temas": [
+      {
+        "titulo": "La célula y sus funciones",
+        "url": "cellsfunctions",
+        "contenido": "La célula es la unidad básica de la vida; todas las funciones vitales dependen de su organización interna. En las células eucariotas, orgánulos como el núcleo, las mitocondrias y el retículo endoplásmico se reparten tareas: almacenar y proteger el ADN, producir energía y fabricar proteínas, respectivamente.\n\nComprender cómo se comunican y especializan las células permite explicar procesos como el crecimiento, la cicatrización y las enfermedades. Los tejidos (epitelial, muscular, nervioso y conectivo) surgen de grupos de células que cooperan para cumplir funciones específicas en órganos y sistemas."
+      },
+      {
+        "titulo": "Genética básica: ADN y herencia",
+        "url": "adn",
+        "contenido": "El ADN almacena la información genética en genes que codifican proteínas; sus variaciones (alelos) explican por qué individuos de una misma especie presentan rasgos distintos. Las leyes de Mendel describen patrones de herencia como dominancia, recesividad y segregación.\n\nEn un cruce simple, un alelo dominante puede ocultar la expresión de uno recesivo en el fenotipo (por ejemplo, Aa expresa el rasgo A). Además de la herencia mendeliana, existen fenómenos como codominancia, herencia poligénica y efectos del ambiente que modulan la expresión de los rasgos."
+      },
+      {
+        "titulo": "Evolución",
+        "url": "evolution",
+        "contenido": "La evolución explica cómo las especies cambian a lo largo del tiempo mediante selección natural y mutaciones. Es la base de la biología moderna y permite entender la diversidad de la vida en la Tierra."
+      }
+    ],
+    "quiz": {
+      "preguntas": [
+        {
+          "pregunta": "¿Qué organelo celular produce la mayor parte del ATP en células animales?",
+          "opciones": ["Mitocondria", "Ribosoma", "Aparato de Golgi", "Lisosoma"],
+          "respuestaCorrecta": 0
+        },
+        {
+          "pregunta": "Si A es dominante sobre a, ¿qué fenotipo se expresa en el genotipo Aa?",
+          "opciones": [
+            "Rasgo a (recesivo)",
+            "Rasgo A (dominante)",
+            "No se expresa ningún rasgo",
+            "Ambos rasgos por igual"
+          ],
+          "respuestaCorrecta": 1
+        }
+      ]
+    }
+  }
+]

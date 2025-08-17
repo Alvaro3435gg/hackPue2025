@@ -1,0 +1,40 @@
+.start-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    justify-content: flex-start;
+    width: 100vw;
+    height: 100vh;
+    background-color: #043c34; /* tu color de fondo */
+    color: white;
+    font-family: 'Inter', sans-serif;
+}
+
+.welcome-text {
+    font-family: 'Inknut Antiqua', serif;
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.progress-section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 1rem 0;
+    align-content: center;
+    align-items: center;
+}
+
+.courses-section {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;         /* ocupa el sobrante */
+    min-height: 0;          /* IMPORTANTE para permitir overflow */
+    overflow-y: auto;       /* scroll solo aquí */
+    gap: 1rem;
+    width: 100%;
+    max-height: 30vh;
+    margin-top: 1rem;
+    margin-left: 20vw;
+}

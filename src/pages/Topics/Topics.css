@@ -1,0 +1,38 @@
+.topic-section {
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  justify-self: top;
+  padding-right: 5%;
+  padding-top: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #063826;
+}
+
+.topic-content{
+  height: 150vw;
+  color: #d9d9d9;
+  text-align: justify;
+  padding-left: 50px;
+  padding-right: 30px;
+  font-weight: bold;
+  font-family: 'Inter', sans-serif;
+  font-size: 18px;
+  background-color: #063826;
+  white-space: pre-wrap;
+  overflow-y: auto;
+}
+
+.return-icon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+    padding-top: 525px;
+}

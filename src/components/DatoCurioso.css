@@ -1,0 +1,43 @@
+.fact-card {
+    min-height: 12vh;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border-radius: 0 50px 50px 0;
+    margin-right: 4vw;
+    background: #386B61;            /* verde grisáceo */
+    color: #F1F3FA;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.fact-icon {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.fact-content {
+    display: grid;
+    gap: 6px;
+}
+
+.fact-title {
+    margin: 0;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.fact-text {
+    margin: 0;
+    font-weight: 700;                 /* como en el mock */
+    line-height: 1.25;
+    font-size: 16px;
+}
+
+/* Responsive pequeño */
+@media (max-width: 420px) {
+    .fact-card { padding: 14px 16px; }
+    .fact-text { font-size: 15px; }
+}
