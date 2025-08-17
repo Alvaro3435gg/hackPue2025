@@ -121,19 +121,31 @@ export function getCourseProgress(courseName: string): { percent: number; done: 
 }
 
 
-// Progreso de toda la plataforma (0–100)
 export function getPlatformProgress(): { percent: number; done: number; total: number } {
     const save = loadSave();
     let done = 0, total = 0;
+
     for (const c of asCursos()) {
-        for (const t of c.temas) {
+        let topics = c.temas.map(t => t.url);
+
+        // aplica límite si existe
+        const limit = QUIZ_LIMITS[c.nombre];
+        if (limit) {
+            topics = topics.slice(0, limit);
+        }
+
+        for (const slug of topics) {
             total += 1;
-            if (save.courses[c.nombre]?.[t.url]?.completed) done += 1;
+            if (save.courses[c.nombre]?.[slug]?.completed) done += 1;
         }
     }
+
     const percent = total ? Math.round((done / total) * 100) : 0;
     return { percent, done, total };
 }
+
+
+
 
 // Estado de un tema (útil para deshabilitar botones o poner check)
 export function getTopicStatus(courseName: string, topicSlug: string): TopicProgress {
