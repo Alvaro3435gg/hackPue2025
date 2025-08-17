@@ -2,6 +2,8 @@ import "./Start.css"
 import BlueButton from "../../components/BlueButton"
 import ProgressBar from "../../components/ProgressBar"
 import ChatBot from "../../components/ChatBot"
+import { getPlatformProgress } from "../../lib/progress";
+import {useEffect, useReducer} from "react";
 
 type CourseItem = { nombre: string; url?: string }
 
@@ -20,8 +22,18 @@ const DEFAULT_COURSES: CourseItem[] = [
 export default function Start({
                                   courses = DEFAULT_COURSES,
                                   userName = "",
-                                  progress = 75,
                               }: StartProps) {
+
+    const [, forceUpdate] = useReducer((x) => x + 1, 0);
+
+    useEffect(() => {
+        const fn = () => forceUpdate(prev => prev + 1); // o setState para refrescar
+        window.addEventListener("progress-changed", fn);
+        return () => window.removeEventListener("progress-changed", fn);
+    }, []);
+
+    const { percent } = getPlatformProgress()
+
     return (
         <div className="start-container">
             {/* Saludo */}
@@ -31,7 +43,7 @@ export default function Start({
 
             {/* Progreso general */}
             <div className="progress-section">
-                <ProgressBar value={progress} version={1} />
+                <ProgressBar value={percent} version={1} />
             </div>
 
             {/* Botones de cursos (scrolleable) */}

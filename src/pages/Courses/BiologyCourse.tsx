@@ -6,15 +6,15 @@ import DatoCurioso from "../../components/DatoCurioso.tsx"
 import coursesData from "../../assets/data/cursos2.json"
 import returnIcon from "../../assets/return.png"
 import { useNavigate } from "react-router-dom"
+import { getCourseProgress } from "../../lib/progress";
+
+const { percent } = getCourseProgress("Biología"); // o "Historia", "Matemáticas"
+
 
 type Tema = { titulo: string; url: string; contenido: string }
 type Curso = { nombre: string; datoCurioso?: string; temas: Tema[] }
 
-type StartProps = {
-    progress?: number
-}
-
-export default function BiologyCourse({ progress = 75 }: StartProps) {
+export default function BiologyCourse() {
     const navigate = useNavigate()
     const handleReturn = () => {
         navigate("/start#")
@@ -30,7 +30,7 @@ export default function BiologyCourse({ progress = 75 }: StartProps) {
 
             {/* Progreso general */}
             <div className="progress-section">
-                <ProgressBar value={progress} version={2} />
+                <ProgressBar value={percent} version={2} />
             </div>
 
             {/* Botones de cursos (mantengo tu lógica actual) */}
