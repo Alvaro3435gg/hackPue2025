@@ -14,16 +14,22 @@ export default function QuizADN() {
     const quiz = curso.quiz;
 
     const [quizPassed, setQuizPassed] = useState(false);
+    const [showPopup, setShowPopup] = useState(false);
 
     const navigate = useNavigate();
 
     const handleResult = (passed: boolean) => {
         if (passed) {
-            setQuizPassed(true); // Permitir avanzar
+            setQuizPassed(true); 
+            setShowPopup(true);
+
+            setTimeout(() => {
+                setShowPopup(false);
+            }, 5000);
         } else {
-            navigate("/analysis", { state: { quiz, userAnswers, tema } });  // Redirigir a la página de análisis
+            navigate("/analysis", { state: { quiz, userAnswers, tema } });
         }
-    }
+    };
 
     const [userAnswers, setUserAnswers] = useState<(number | null)[]>(
         Array(quiz.preguntas.length).fill(null)
@@ -36,47 +42,55 @@ export default function QuizADN() {
     };
 
     return (
-        <div className="quiz-section">
-            {quizPassed ? (
-                <TopicNavigator 
-                    text={`Quiz de ${tema.titulo}`} 
-                    prevUrl="/adn" 
-                    nextUrl="/evolution"
-                />
-            ) : (
-                <NoNext 
-                    text={`Quiz de ${tema.titulo}`} 
-                    prevUrl="/adn" 
-                />
+        <>
+            {showPopup && (
+                <div className="popup-message">
+                    🎉 ¡Felicitaciones!
+                </div>
             )}
 
-            <div className="quiz-questions">
-                {quiz.preguntas.map((pregunta, qIndex) => (
-                    <div key={qIndex} className="quiz-question">
-                        <h3>{pregunta.pregunta}</h3>
-                        <div className="quiz-options">
-                            {pregunta.opciones.map((opcion, oIndex) => (
-                                <QuizButton
-                                    key={oIndex}
-                                    nombre={opcion}
-                                    value={userAnswers[qIndex] === oIndex}
-                                    onClick={() => handleSelectOption(qIndex, oIndex)}
-                                />
-                            ))}
+            <div className="quiz-section">
+                {quizPassed ? (
+                    <TopicNavigator 
+                        text={`Quiz de ${tema.titulo}`} 
+                        prevUrl="/adn" 
+                        nextUrl="/evolution"
+                    />
+                ) : (
+                    <NoNext 
+                        text={`Quiz de ${tema.titulo}`} 
+                        prevUrl="/adn" 
+                    />
+                )}
+
+                <div className="quiz-questions">
+                    {quiz.preguntas.map((pregunta, qIndex) => (
+                        <div key={qIndex} className="quiz-question">
+                            <h3>{pregunta.pregunta}</h3>
+                            <div className="quiz-options">
+                                {pregunta.opciones.map((opcion, oIndex) => (
+                                    <QuizButton
+                                        key={oIndex}
+                                        nombre={opcion}
+                                        value={userAnswers[qIndex] === oIndex}
+                                        onClick={() => handleSelectOption(qIndex, oIndex)}
+                                    />
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
 
-            <SubmitButton 
-                quiz={quiz} 
-                userAnswers={userAnswers} 
-                onResult={handleResult} 
-            />
+                <SubmitButton 
+                    quiz={quiz} 
+                    userAnswers={userAnswers} 
+                    onResult={handleResult} 
+                />
 
-            <div className="chat-section">
-                <ChatBot />
+                <div className="chat-section">
+                    <ChatBot />
+                </div>
             </div>
-        </div>
+        </>
     );
 }
