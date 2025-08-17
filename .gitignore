@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+**/decoder_model_merged_quantized.onnx
+*.onnx
+public/models/

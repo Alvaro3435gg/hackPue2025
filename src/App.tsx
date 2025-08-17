@@ -1,7 +1,11 @@
-import OfflineChat from './components/OfflineChat';
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from "./routes/AppRoutes";
 
-function App() {
-  return <OfflineChat />;
+export default function App() {
+    return (
+        <BrowserRouter>
+            <AppRoutes />
+        </BrowserRouter>
+    );
 }
 
-export default App;

@@ -1,0 +1,46 @@
+.welcome-container {
+  width: 100vw;
+  font-family: 'Inter', sans-serif;
+  font-size: 3.3vw;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #06382E;
+  color: #F1F3FA;
+  text-align: center;
+  align-items: center;
+  align-content: center;
+}
+
+.welcome-content{
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  align-items: center;
+  align-content: center;
+  bottom: 10vh;
+}
+
+.welcome-content h1{
+  width: 70vw;
+}
+
+
+.start-button{
+  width: 60vw;
+  font-size: 7vw;
+  font-weight: bold;
+  background-color: #00B1D3;
+  color: #F1F3FA;
+}
+
+.spacer{
+  height: 10vh;
+}
+
+.logo-icon{
+  width: 90vw;
+  height: 90vw;
+}
