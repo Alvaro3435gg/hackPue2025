@@ -3,6 +3,8 @@ import BlueButton from "../../components/BlueButton.tsx"
 import ProgressBar from "../../components/ProgressBar.tsx"
 import ChatBot from "../../components/ChatBot.tsx";
 import coursesData from "../../assets/data/cursos2.json"
+import returnIcon from "../../assets/return.png";
+import { useNavigate } from "react-router-dom";
 
 type CourseItem = { nombre: string; url?: string }
 
@@ -15,11 +17,18 @@ type StartProps = {
 export default function HistoryCourse({
     progress = 75,
 }: StartProps) {
+
+    const navigate = useNavigate();
+
+    const handleReturn = () => {
+        navigate("/start#");
+    };
+
     return (
         <div className="start-container">
             {/* Saludo */}
             <h2 className="welcome-text">
-                Curso de Matemáticas
+                Curso de Historia
             </h2>
 
             {/* Progreso general */}
@@ -31,7 +40,7 @@ export default function HistoryCourse({
             <div className="courses-section" aria-label="Lista de cursos">
                 {coursesData
                     .flatMap(area => area.temas)
-                    .slice(2, 4)
+                    .slice(3, 5)
                     .map(tema => (
                         <BlueButton
                             key={tema.titulo}
@@ -41,6 +50,14 @@ export default function HistoryCourse({
                     ))
                 }
             </div>
+
+            {/* Return icon button */}
+            <img 
+                src={returnIcon} 
+                alt="Return" 
+                className="return-icon" 
+                onClick={handleReturn} 
+            />
 
             {/* Chat abajo */}
             <ChatBot />

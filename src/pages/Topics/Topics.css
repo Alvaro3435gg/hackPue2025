@@ -26,3 +26,13 @@
   white-space: pre-wrap;
   overflow-y: auto;
 }
+
+.return-icon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+    padding-top: 525px;
+}

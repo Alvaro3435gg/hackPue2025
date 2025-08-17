@@ -21,7 +21,7 @@ export default function Analysis() {
         <div className="analysis-section">
             <NoNext 
                 text={`Quiz de ${tema.titulo}`} 
-                prevUrl="https://www.youtube.com" 
+                prevUrl="/start#" 
             />
             <h2>Análisis del Quiz</h2>
 

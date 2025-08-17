@@ -7,6 +7,9 @@ import MexicanIndependence from "../pages/Topics/MexicoIndependence";
 import MexicanRevolution from "../pages/Topics/MexicanRevolution";
 import CellsFunctions from "../pages/Topics/CellsFunctions";
 import ADN from "../pages/Topics/ADN";
+import ContemporaryHistory from "../pages/Topics/ContemporaryHistory.tsx";
+import Evolution from "../pages/Topics/Evolution.tsx";
+import Trigonometry from "../pages/Topics/Trigonometry.tsx";
 import QuizBasicAlgebra from "../pages/Quizzes/QuizBasicAlgebra";
 import QuizGeometry from "../pages/Quizzes/QuizGeometry";
 import QuizMexicanRevolution from "../pages/Quizzes/QuizMexicanRevolution";
@@ -37,6 +40,9 @@ export default function AppRoutes() {
             <Route path="/cellsfunctions/quiz" element={<QuizCellsFunctions />} />
             <Route path="/adn" element={<ADN />} />
             <Route path="/adn/quiz" element={<QuizADN />} />
+            <Route path="/contemporaryhistory" element={ <ContemporaryHistory />} />
+            <Route path="/evolution" element={<Evolution />} />
+            <Route path="/trigonometry" element= { <Trigonometry />} />
             <Route path="/analysis" element={<Analysis />} />
             <Route path="/mathcourse" element={<MathCourse />} />
             <Route path="/biologycourse" element={<BiologyCourse />} />

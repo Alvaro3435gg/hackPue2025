@@ -1,13 +1,13 @@
 import "./Topics.css";
-import TopicNavigator from "../../components/TopicsNavigation";
+import NoNext from "../../components/NoNext";
 import ChatBot from "../../components/ChatBot"
 import cursos from "../../assets/data/cursos2.json";
 import returnIcon from "../../assets/return.png";
 import { useNavigate } from "react-router-dom";
 
-export default function CellsFunctions() {
+export default function Evolution() {
     const curso = cursos[2]; 
-    const tema = curso.temas[0]; 
+    const tema = curso.temas[2]; 
 
     const navigate = useNavigate();
 
@@ -17,22 +17,19 @@ export default function CellsFunctions() {
     
     return (
         <div className="topic-section">
-            <TopicNavigator 
+            <NoNext 
                 text={tema.titulo} 
-                prevUrl="/adn" 
-                nextUrl="/cellsfunctions/quiz" 
+                prevUrl="/cellsfunctions/quiz" 
             />
             <div className="topic-content">
                 <p>{tema.contenido}</p>
             </div>
-
             <img 
                 src={returnIcon} 
                 alt="Return" 
                 className="return-icon" 
                 onClick={handleReturn} 
             />
-
             <div className="chat-section">
                 <ChatBot />
             </div>
