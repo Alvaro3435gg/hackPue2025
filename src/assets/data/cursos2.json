@@ -12,6 +12,11 @@
         "titulo": "Geometría",
         "url": "geometry",
         "contenido": "La geometría es la rama de las matemáticas que estudia las propiedades y relaciones de puntos, líneas, superficies y cuerpos en el espacio. Desde la antigüedad, se ha utilizado para medir tierras, construir edificios y comprender la forma del mundo que nos rodea. En la geometría plana, por ejemplo, trabajamos con figuras como triángulos, círculos y polígonos.\n\nMás allá de la teoría, la geometría tiene aplicaciones prácticas en áreas como la arquitectura, el diseño gráfico y la ingeniería. Saber calcular perímetros, áreas y volúmenes es esencial para resolver problemas cotidianos y profesionales, y también desarrolla habilidades de razonamiento lógico y espacial."
+      },
+      {
+        "titulo": "Trigonometría",
+        "url": "trigonometry",
+        "contenido": "La trigonometría estudia las relaciones entre los ángulos y los lados de los triángulos. Es fundamental para la física, ingeniería y arquitectura, así como para entender fenómenos periódicos y ondas en matemáticas avanzadas."
       }
     ],
     "quiz": {
@@ -52,6 +57,11 @@
         "titulo": "Revolución Mexicana",
         "url": "mexicanrevolution",
         "contenido": "La Revolución Mexicana inició en 1910 como un movimiento armado contra la dictadura de Porfirio Díaz, quien llevaba más de 30 años en el poder. Los campesinos, obreros y diferentes sectores de la sociedad se unieron para exigir justicia social, mejores condiciones de trabajo y el fin de la concentración de tierras en pocas manos. Líderes como Francisco I. Madero, Emiliano Zapata y Pancho Villa se convirtieron en símbolos de la lucha.\n\nAunque fue un proceso largo y complejo, con muchos enfrentamientos entre distintas facciones, la Revolución dejó como legado importantes transformaciones en la política y en la sociedad mexicana. La Constitución de 1917, producto de este movimiento, incluyó avances en derechos laborales, educación y propiedad de la tierra, sentando las bases del México moderno."
+      },
+      {
+        "titulo": "Historia Contemporánea",
+        "url": "contemporaryhistory",
+        "contenido": "La historia contemporánea estudia los eventos más recientes desde finales del siglo XIX hasta la actualidad, incluyendo guerras mundiales, movimientos sociales y cambios políticos significativos que han moldeado el mundo moderno."
       }
     ],
     "quiz": {
@@ -92,6 +102,11 @@
         "titulo": "Genética básica: ADN y herencia",
         "url": "adn",
         "contenido": "El ADN almacena la información genética en genes que codifican proteínas; sus variaciones (alelos) explican por qué individuos de una misma especie presentan rasgos distintos. Las leyes de Mendel describen patrones de herencia como dominancia, recesividad y segregación.\n\nEn un cruce simple, un alelo dominante puede ocultar la expresión de uno recesivo en el fenotipo (por ejemplo, Aa expresa el rasgo A). Además de la herencia mendeliana, existen fenómenos como codominancia, herencia poligénica y efectos del ambiente que modulan la expresión de los rasgos."
+      },
+      {
+        "titulo": "Evolución",
+        "url": "evolution",
+        "contenido": "La evolución explica cómo las especies cambian a lo largo del tiempo mediante selección natural y mutaciones. Es la base de la biología moderna y permite entender la diversidad de la vida en la Tierra."
       }
     ],
     "quiz": {

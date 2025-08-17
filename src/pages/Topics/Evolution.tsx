@@ -1,18 +1,17 @@
 import "./Topics.css";
-import TopicNavigator from "../../components/TopicsNavigation";
+import NoNext from "../../components/NoNext";
 import ChatBot from "../../components/ChatBot"
 import cursos from "../../assets/data/cursos2.json";
 
-export default function TopicSample() {
-    const curso = cursos[1]; 
-    const tema = curso.temas[1]; 
+export default function Evolution() {
+    const curso = cursos[2]; 
+    const tema = curso.temas[2]; 
     
     return (
         <div className="topic-section">
-            <TopicNavigator 
+            <NoNext 
                 text={tema.titulo} 
-                prevUrl="/mexicanindependence" 
-                nextUrl="/mexicanrevolution/quiz" 
+                prevUrl="/cellsfunctions/quiz" 
             />
             <div className="topic-content">
                 <p>{tema.contenido}</p>
