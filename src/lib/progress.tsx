@@ -22,6 +22,12 @@ const STORAGE_KEY = "chiukhan.save";
 // === Helpers ===
 const asCursos = () => (cursosData as Curso[]);
 
+// arriba del archivo
+const QUIZ_LIMITS: Record<string, number> = {
+    "Biología": 2,
+};
+
+
 // Construye un save vacío a partir del cursos2.json
 export function buildEmptySave(): Save {
     const base: Save = { version: 1, courses: {} };
@@ -33,6 +39,7 @@ export function buildEmptySave(): Save {
     }
     return base;
 }
+
 
 // Mezcla un save existente con el baseline (por si agregas temas nuevos)
 function deepMergeSave(baseline: Save, loaded?: Save | null): Save {
@@ -91,18 +98,26 @@ export function recordQuizResult(courseName: string, topicSlug: string, score: n
     saveSave(save)
 }
 
-// Progreso por curso (0–100)
 export function getCourseProgress(courseName: string): { percent: number; done: number; total: number } {
     const save = loadSave();
     const curso = asCursos().find(c => c.nombre === courseName);
     if (!curso) return { percent: 0, done: 0, total: 0 };
-    const topics = curso.temas.map(t => t.url);
+
+    let topics = curso.temas.map(t => t.url);
+
+    // aplica límite si existe
+    const limit = QUIZ_LIMITS[courseName];
+    if (limit) {
+        topics = topics.slice(0, limit);
+    }
+
     const states = topics.map(slug => save.courses[courseName]?.[slug]?.completed === true);
     const done = states.filter(Boolean).length;
     const total = topics.length;
     const percent = total ? Math.round((done / total) * 100) : 0;
     return { percent, done, total };
 }
+
 
 // Progreso de toda la plataforma (0–100)
 export function getPlatformProgress(): { percent: number; done: number; total: number } {
