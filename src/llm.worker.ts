@@ -34,19 +34,7 @@ function parseCategory(t: string): "historia"|"matematicas"|"biologia" {
 }
 
 // ====== prompts
-const buildPromptCategory = (q:string)=>`<|im_start|>system
-Eres un CLASIFICADOR ESTRICTO.
-Categorias validas (minusculas, sin acentos):
-- historia
-- matematicas
-- biologia
-Responde SOLO una palabra: historia | matematicas | biologia
-<|im_end|>
-<|im_start|>user
-${q}
-<|im_end|>
-<|im_start|>assistant
-`;
+const buildPromptCategory = (q:string)=>`Responde con una sola palabra, ¿la categoria de la siguiente oracion es HISTORIA, MATEMATICAS o BIOLOGIA? - ${q}`;
 
 const buildPromptAnswer = (q:string)=>`<|im_start|>system
 Eres un asistente. Responde conciso en español.
