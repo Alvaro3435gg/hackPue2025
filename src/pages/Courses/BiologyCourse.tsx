@@ -1,6 +1,5 @@
 import "./Course.css"
 import BlueButton from "../../components/BlueButton.tsx"
-import ProgressBar from "../../components/ProgressBar.tsx"
 import ChatBot from "../../components/ChatBot.tsx"
 import DatoCurioso from "../../components/DatoCurioso.tsx"
 import coursesData from "../../assets/data/cursos2.json"
@@ -10,11 +9,8 @@ import { useNavigate } from "react-router-dom"
 type Tema = { titulo: string; url: string; contenido: string }
 type Curso = { nombre: string; datoCurioso?: string; temas: Tema[] }
 
-type StartProps = {
-    progress?: number
-}
 
-export default function BiologyCourse({ progress = 75 }: StartProps) {
+export default function BiologyCourse() {
     const navigate = useNavigate()
     const handleReturn = () => {
         navigate("/start#")
@@ -28,10 +24,6 @@ export default function BiologyCourse({ progress = 75 }: StartProps) {
             {/* Saludo */}
             <h2 className="welcome-text">Curso de Biología</h2>
 
-            {/* Progreso general */}
-            <div className="progress-section">
-                <ProgressBar value={progress} version={2} />
-            </div>
 
             {/* Botones de cursos (mantengo tu lógica actual) */}
             <div className="courses-section" aria-label="Lista de cursos">
