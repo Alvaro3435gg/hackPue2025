@@ -1,54 +1,66 @@
-# React + TypeScript + Vite
+# README — Xenova/Qwen1.5-0.5B-Chat (ONNX)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Modelo
 
-Currently, two official plugins are available:
+Este proyecto utiliza el modelo **[Xenova/Qwen1.5-0.5B-Chat](https://huggingface.co/Xenova/Qwen1.5-0.5B-Chat)**, convertido a **ONNX** para su uso en navegador o Node.js mediante **Transformers.js**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+> 🔹 También existe el repo base (no-chat): [Xenova/Qwen1.5-0.5B](https://huggingface.co/Xenova/Qwen1.5-0.5B).
 
-## Expanding the ESLint configuration
+Ambos están optimizados para ejecución local y soportan cuantización.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Estructura de archivos
+
+Los archivos del modelo deben organizarse de la siguiente forma dentro del proyecto:
+
+```
+public/
+└── models/
+    └── Xenova/
+        └── Qwen1.5-0.5B-Chat/
+            └── onnx/
+                ├── decoder_model_merged_quantized.onnx
+                ├── config.json
+                ├── generation_config.json
+                ├── tokenizer_config.json
+                └── tokenizer.json
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Instalación
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+Instala la librería oficial:
+
+```bash
+npm install @xenova/transformers
 ```
+
+---
+
+##  Uso rápido
+
+### 1. Ejecutar localmente en modo desarrollo
+
+Si tu proyecto ya usa **Vite**, **Next.js** o similar, puedes correrlo con:
+
+```bash
+npm run dev
+```
+
+Esto levantará tu entorno local y podrás acceder a la app que cargue el modelo desde `public/models`.
+
+---
+
+### 2. Hacer build para producción
+
+Cuando quieras generar la versión optimizada:
+
+```bash
+npm run build
+npx serve dist
+```
+
+
+
