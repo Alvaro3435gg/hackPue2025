@@ -1,13 +1,7 @@
-// src/App.tsx
-import TestData from './components/TestData';
+import OfflineChat from './components/OfflineChat';
 
 function App() {
-  return (
-    <div>
-      <h1>Test Collections Viewer</h1>
-      <TestData />
-    </div>
-  );
+  return <OfflineChat />;
 }
 
 export default App;
