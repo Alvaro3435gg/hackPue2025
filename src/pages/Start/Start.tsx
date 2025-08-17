@@ -1,7 +1,9 @@
-import "./Start.css";
-import BlueButton from "../../components/BlueButton";
-import ProgressBar from "../../components/ProgressBar";
-import ChatBot from "../../components/ChatBot";
+import "./Start.css"
+import BlueButton from "../../components/BlueButton"
+import ProgressBar from "../../components/ProgressBar"
+import ChatBot from "../../components/ChatBot"
+import { getPlatformProgress } from "../../lib/progress";
+import {useEffect, useReducer} from "react";
 import { useState } from "react";
 
 type CourseItem = { nombre: string; url?: string };
@@ -33,9 +35,18 @@ function matchesCategory(curso: CourseItem, cat: "biologia" | "matematicas" | "h
 export default function Start({
   courses = DEFAULT_COURSES,
   userName = "",
-  progress = 75,
 }: StartProps) {
+
+    const [, forceUpdate] = useReducer((x) => x + 1, 0);
   const [visibleCourses, setVisibleCourses] = useState<CourseItem[]>(courses);
+
+    useEffect(() => {
+        const fn = () => forceUpdate(prev => prev + 1); // o setState para refrescar
+        window.addEventListener("progress-changed", fn);
+        return () => window.removeEventListener("progress-changed", fn);
+    }, []);
+
+    const { percent } = getPlatformProgress()
 
   // cuando el chat sugiere categorías, filtramos
   const handleSuggest = (cats: Array<"biologia" | "matematicas" | "historia">) => {
@@ -52,7 +63,7 @@ export default function Start({
 
       {/* Progreso general */}
       <div className="progress-section">
-        <ProgressBar value={progress} version={1} />
+        <ProgressBar value={percent} version={1} />
       </div>
 
       {/* Botones de cursos (scrolleable) */}

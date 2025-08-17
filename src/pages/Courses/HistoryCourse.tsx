@@ -7,36 +7,48 @@ import DatoCurioso from "../../components/DatoCurioso.tsx"
 import coursesData from "../../assets/data/cursos2.json"
 import returnIcon from "../../assets/return.png"
 import { useNavigate } from "react-router-dom"
+// ⬇️ importa progreso
+import { getCourseProgress } from "../../lib/progress"
+import { useEffect, useState } from "react"
 
 type Tema = { titulo: string; url: string; contenido: string }
 type Curso = { nombre: string; datoCurioso?: string; temas: Tema[] }
 
-type StartProps = {
-    progress?: number
-}
-
-export default function HistoryCourse({ progress = 75 }: StartProps) {
+export default function HistoryCourse() {
     const navigate = useNavigate()
     const handleReturn = () => navigate("/start#")
 
-    // Solo para leer el datoCurioso de "Historia"
+    // leer datoCurioso de Historia
     const history = (coursesData as Curso[]).find(c => c.nombre === "Historia")
+
+    // estado de progreso
+    const [progress, setProgress] = useState(0)
+
+    useEffect(() => {
+        // función para refrescar progreso
+        const refresh = () => {
+            const { percent } = getCourseProgress("Historia")
+            setProgress(percent)
+        }
+        refresh() // primera carga
+        window.addEventListener("progress-changed", refresh)
+        return () => window.removeEventListener("progress-changed", refresh)
+    }, [])
 
     return (
         <div className="start-container">
-            {/* Saludo */}
             <h2 className="welcome-text">Curso de Historia</h2>
 
-            {/* Progreso general */}
+            {/* Progreso real */}
             <div className="progress-section">
                 <ProgressBar value={progress} version={2} />
             </div>
 
-            {/* Botones de cursos (mantengo tu slice) */}
+            {/* Botones de cursos */}
             <div className="courses-section" aria-label="Lista de cursos">
                 {coursesData
                     .flatMap(area => area.temas)
-                    .slice(3, 5)
+                    .slice(3, 5) // <-- aquí asumes que Historia son temas 3 y 4
                     .map(tema => (
                         <BlueButton
                             key={tema.titulo}
@@ -47,12 +59,12 @@ export default function HistoryCourse({ progress = 75 }: StartProps) {
                 }
             </div>
 
-            {/* Dato curioso (ANTES de la flecha, sin tocar la flecha) */}
+            {/* Dato curioso */}
             {history?.datoCurioso && (
                 <DatoCurioso text={history.datoCurioso} className="mb-12" />
             )}
 
-            {/* Return icon button (sin cambios) */}
+            {/* Return icon */}
             <img
                 src={returnIcon}
                 alt="Return"
@@ -60,7 +72,6 @@ export default function HistoryCourse({ progress = 75 }: StartProps) {
                 onClick={handleReturn}
             />
 
-            {/* Chat abajo */}
             <ChatBot />
         </div>
     )

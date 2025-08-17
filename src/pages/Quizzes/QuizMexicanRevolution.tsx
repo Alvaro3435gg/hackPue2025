@@ -1,3 +1,4 @@
+// src/pages/Quiz/QuizMexicanRevolution.tsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Quiz.css";
@@ -7,10 +8,12 @@ import ChatBot from "../../components/ChatBot";
 import QuizButton from "../../components/QuizButton";
 import SubmitButton from "../../components/SubmitButton";
 import cursos from "../../assets/data/cursos2.json";
+// ⬇️ IMPORTA progreso
+import { recordQuizResult } from "../../lib/progress";
 
 export default function QuizMexicanRevolution() {
     const curso = cursos[1]; // "Historia"
-    const tema = curso.temas[0]; // "La célula y sus funciones"
+    const tema = curso.temas[1]; // "Revolución Mexicana"
     const quiz = curso.quiz;
 
     const [quizPassed, setQuizPassed] = useState(false);
@@ -18,18 +21,10 @@ export default function QuizMexicanRevolution() {
 
     const navigate = useNavigate();
 
-    const handleResult = (passed: boolean) => {
-        if (passed) {
-            setQuizPassed(true); 
-            setShowPopup(true);
-
-            setTimeout(() => {
-                setShowPopup(false);
-            }, 5000);
-        } else {
-            navigate("/analysis", { state: { quiz, userAnswers, tema } });
-        }
-    };
+    // helpers de progreso
+    const courseName = curso.nombre;   // "Historia"
+    const topicSlug = tema.url;        // "mexicanrevolution"
+    const PASS = 60;
 
     const [userAnswers, setUserAnswers] = useState<(number | null)[]>(
         Array(quiz.preguntas.length).fill(null)
@@ -41,34 +36,51 @@ export default function QuizMexicanRevolution() {
         setUserAnswers(newAnswers);
     };
 
+    const handleResult = (passed: boolean) => {
+        // calcular score
+        const correct = quiz.preguntas.reduce(
+            (acc: number, p: any, i: number) =>
+                acc + (userAnswers[i] === p.respuestaCorrecta ? 1 : 0),
+            0
+        );
+        const score = Math.round((correct / quiz.preguntas.length) * 100);
+
+        // registrar resultado en progreso
+        recordQuizResult(courseName, topicSlug, score, PASS);
+
+        if (passed) {
+            setQuizPassed(true);
+            setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 5000);
+        } else {
+            navigate("/analysis", { state: { quiz, userAnswers, tema } });
+        }
+    };
+
     return (
         <>
-            {showPopup && (
-                <div className="popup-message">
-                    🎉 ¡Felicitaciones!
-                </div>
-            )}
-            
+            {showPopup && <div className="popup-message">🎉 ¡Felicitaciones!</div>}
+
             <div className="quiz-section">
                 {quizPassed ? (
-                    <TopicNavigator 
-                        text={`Quiz de ${tema.titulo}`} 
-                        prevUrl="/mexicanrevolution" 
+                    <TopicNavigator
+                        text={`Quiz de ${tema.titulo}`}
+                        prevUrl="/mexicanrevolution"
                         nextUrl="/contemporaryhistory"
                     />
                 ) : (
-                    <NoNext 
-                        text={`Quiz de ${tema.titulo}`} 
-                        prevUrl="/mexicanrevolution" 
+                    <NoNext
+                        text={`Quiz de ${tema.titulo}`}
+                        prevUrl="/mexicanrevolution"
                     />
                 )}
 
                 <div className="quiz-questions">
-                    {quiz.preguntas.map((pregunta, qIndex) => (
+                    {quiz.preguntas.map((pregunta: any, qIndex: number) => (
                         <div key={qIndex} className="quiz-question">
                             <h3>{pregunta.pregunta}</h3>
                             <div className="quiz-options">
-                                {pregunta.opciones.map((opcion, oIndex) => (
+                                {pregunta.opciones.map((opcion: string, oIndex: number) => (
                                     <QuizButton
                                         key={oIndex}
                                         nombre={opcion}
@@ -81,10 +93,10 @@ export default function QuizMexicanRevolution() {
                     ))}
                 </div>
 
-                <SubmitButton 
-                    quiz={quiz} 
-                    userAnswers={userAnswers} 
-                    onResult={handleResult} 
+                <SubmitButton
+                    quiz={quiz}
+                    userAnswers={userAnswers}
+                    onResult={handleResult}
                 />
 
                 <div className="chat-section">

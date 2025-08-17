@@ -7,29 +7,23 @@ import ChatBot from "../../components/ChatBot";
 import QuizButton from "../../components/QuizButton";
 import SubmitButton from "../../components/SubmitButton";
 import cursos from "../../assets/data/cursos2.json";
+// ⬇️ IMPORTA la utilidad
+import { recordQuizResult } from "../../lib/progress";
 
 export default function QuizMexicanIndependence() {
     const curso = cursos[1]; // "Historia"
     const tema = curso.temas[0]; // "Independencia Mexicana"
     const quiz = curso.quiz;
-    
+
     const [quizPassed, setQuizPassed] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
 
     const navigate = useNavigate();
 
-    const handleResult = (passed: boolean) => {
-        if (passed) {
-            setQuizPassed(true); 
-            setShowPopup(true);
-
-            setTimeout(() => {
-                setShowPopup(false);
-            }, 5000);
-        } else {
-            navigate("/analysis", { state: { quiz, userAnswers, tema } });
-        }
-    };
+    // helpers de progreso
+    const courseName = curso.nombre;  // "Historia"
+    const topicSlug = tema.url;       // "mexicanindependence"
+    const PASS = 60;
 
     const [userAnswers, setUserAnswers] = useState<(number | null)[]>(
         Array(quiz.preguntas.length).fill(null)
@@ -41,25 +35,42 @@ export default function QuizMexicanIndependence() {
         setUserAnswers(newAnswers);
     };
 
+    const handleResult = (passed: boolean) => {
+        // calcular score
+        const correct = quiz.preguntas.reduce(
+            (acc: number, p: any, i: number) =>
+                acc + (userAnswers[i] === p.respuestaCorrecta ? 1 : 0),
+            0
+        );
+        const score = Math.round((correct / quiz.preguntas.length) * 100);
+
+        // registrar resultado en progreso
+        recordQuizResult(courseName, topicSlug, score, PASS);
+
+        if (passed) {
+            setQuizPassed(true);
+            setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 5000);
+        } else {
+            navigate("/analysis", { state: { quiz, userAnswers, tema } });
+        }
+    };
+
     return (
         <>
-            {showPopup && (
-                <div className="popup-message">
-                    🎉 ¡Felicitaciones!
-                </div>
-            )}
-            
+            {showPopup && <div className="popup-message">🎉 ¡Felicitaciones!</div>}
+
             <div className="quiz-section">
                 {quizPassed ? (
-                    <TopicNavigator 
-                        text={`Quiz de ${tema.titulo}`} 
-                        prevUrl="/mexicanindependence" 
+                    <TopicNavigator
+                        text={`Quiz de ${tema.titulo}`}
+                        prevUrl="/mexicanindependence"
                         nextUrl="/contemporaryhistory"
                     />
                 ) : (
-                    <NoNext 
-                        text={`Quiz de ${tema.titulo}`} 
-                        prevUrl="/mexicanindependence" 
+                    <NoNext
+                        text={`Quiz de ${tema.titulo}`}
+                        prevUrl="/mexicanindependence"
                     />
                 )}
 
@@ -81,10 +92,10 @@ export default function QuizMexicanIndependence() {
                     ))}
                 </div>
 
-                <SubmitButton 
-                    quiz={quiz} 
-                    userAnswers={userAnswers} 
-                    onResult={handleResult} 
+                <SubmitButton
+                    quiz={quiz}
+                    userAnswers={userAnswers}
+                    onResult={handleResult}
                 />
 
                 <div className="chat-section">

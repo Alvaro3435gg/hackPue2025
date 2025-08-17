@@ -7,10 +7,12 @@ import ChatBot from "../../components/ChatBot";
 import QuizButton from "../../components/QuizButton";
 import SubmitButton from "../../components/SubmitButton";
 import cursos from "../../assets/data/cursos2.json";
+// ⬇️ IMPORTA la utilidad
+import { recordQuizResult } from "../../lib/progress";
 
 export default function QuizADN() {
-    const curso = cursos[2]; // "Biología"
-    const tema = curso.temas[1]; // "Genética básica: ADN y herencia"
+    const curso = cursos[2];            // "Biología"
+    const tema = curso.temas[1];        // "Genética básica: ADN y herencia"
     const quiz = curso.quiz;
 
     const [quizPassed, setQuizPassed] = useState(false);
@@ -18,18 +20,10 @@ export default function QuizADN() {
 
     const navigate = useNavigate();
 
-    const handleResult = (passed: boolean) => {
-        if (passed) {
-            setQuizPassed(true); 
-            setShowPopup(true);
-
-            setTimeout(() => {
-                setShowPopup(false);
-            }, 5000);
-        } else {
-            navigate("/analysis", { state: { quiz, userAnswers, tema } });
-        }
-    };
+    // ⬇️ helpers para guardar progreso
+    const courseName = curso.nombre;    // "Biología"
+    const topicSlug = tema.url;         // "adn"
+    const PASS = 60;                    // umbral para aprobar
 
     const [userAnswers, setUserAnswers] = useState<(number | null)[]>(
         Array(quiz.preguntas.length).fill(null)
@@ -41,34 +35,44 @@ export default function QuizADN() {
         setUserAnswers(newAnswers);
     };
 
+    const handleResult = (passed: boolean) => {
+        // calcula el puntaje (0–100) según respuestas correctas
+        const correct = quiz.preguntas.reduce(
+            (acc: number, p: any, i: number) =>
+                acc + (userAnswers[i] === p.respuestaCorrecta ? 1 : 0),
+            0
+        );
+        const score = Math.round((correct / quiz.preguntas.length) * 100);
+
+        // ⬇️ guarda resultado (dispara "progress-changed")
+        recordQuizResult(courseName, topicSlug, score, PASS);
+
+        if (passed) {
+            setQuizPassed(true);
+            setShowPopup(true);
+            setTimeout(() => setShowPopup(false), 5000);
+        } else {
+            navigate("/analysis", { state: { quiz, userAnswers, tema } });
+        }
+    };
+
     return (
         <>
-            {showPopup && (
-                <div className="popup-message">
-                    🎉 ¡Felicitaciones!
-                </div>
-            )}
+            {showPopup && <div className="popup-message">🎉 ¡Felicitaciones!</div>}
 
             <div className="quiz-section">
                 {quizPassed ? (
-                    <TopicNavigator 
-                        text={`Quiz de ${tema.titulo}`} 
-                        prevUrl="/adn" 
-                        nextUrl="/evolution"
-                    />
+                    <TopicNavigator text={`Quiz de ${tema.titulo}`} prevUrl="/adn" nextUrl="/evolution" />
                 ) : (
-                    <NoNext 
-                        text={`Quiz de ${tema.titulo}`} 
-                        prevUrl="/adn" 
-                    />
+                    <NoNext text={`Quiz de ${tema.titulo}`} prevUrl="/adn" />
                 )}
 
                 <div className="quiz-questions">
-                    {quiz.preguntas.map((pregunta, qIndex) => (
+                    {quiz.preguntas.map((pregunta: any, qIndex: number) => (
                         <div key={qIndex} className="quiz-question">
                             <h3>{pregunta.pregunta}</h3>
                             <div className="quiz-options">
-                                {pregunta.opciones.map((opcion, oIndex) => (
+                                {pregunta.opciones.map((opcion: string, oIndex: number) => (
                                     <QuizButton
                                         key={oIndex}
                                         nombre={opcion}
@@ -81,11 +85,7 @@ export default function QuizADN() {
                     ))}
                 </div>
 
-                <SubmitButton 
-                    quiz={quiz} 
-                    userAnswers={userAnswers} 
-                    onResult={handleResult} 
-                />
+                <SubmitButton quiz={quiz} userAnswers={userAnswers} onResult={handleResult} />
 
                 <div className="chat-section">
                     <ChatBot />
