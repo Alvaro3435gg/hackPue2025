@@ -6,7 +6,7 @@
     justify-content: flex-start;
     width: 100vw;
     height: 100vh;
-    background-color: #043c34; /* tu color de fondo */
+    background-color: #043c34;
     color: white;
     font-family: 'Inter', sans-serif;
 }
@@ -29,12 +29,23 @@
 .courses-section {
     display: flex;
     flex-direction: column;
-    flex: 1 1 auto;         /* ocupa el sobrante */
-    min-height: 0;          /* IMPORTANTE para permitir overflow */
-    overflow-y: auto;       /* scroll solo aquí */
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
     gap: 1rem;
     width: 100%;
     max-height: 30vh;
     margin-top: 1rem;
     margin-left: 20vw;
+}
+
+.return-icon {
+    height: 50px;
+    width: 50px;
+    cursor: pointer;
+    display: block;     
+    margin-top: 120px;
+    margin-left: 0;
+    align-self: self-start;
+    padding-left: 20px;
 }
